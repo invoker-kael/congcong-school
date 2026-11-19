@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Keep rebuilt release data on the verified, cache-busting audio URLs."""
+import argparse
 import hashlib
 import json
 import re
@@ -8,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def apply(public, mapping_file):
+def apply(public, mapping_file, external_audio=False):
     if not mapping_file.is_file():
         print('[audio-versions] No release mapping; keeping generated URLs')
         return 0
@@ -27,6 +28,8 @@ def apply(public, mapping_file):
 
     checked = {}
     def verify(url, expected):
+        if external_audio:
+            return
         path = asset(url)
         if url not in checked:
             checked[url] = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -71,4 +74,9 @@ def apply(public, mapping_file):
 
 
 if __name__ == '__main__':
-    apply(ROOT / 'apps/web/public', ROOT / 'release/audio-version-map.json')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--external-audio', action='store_true',
+                        help='Audio files are installed separately and verified by the release installer.')
+    args = parser.parse_args()
+    apply(ROOT / 'apps/web/public', ROOT / 'release/audio-version-map.json',
+          external_audio=args.external_audio)

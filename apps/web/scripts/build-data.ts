@@ -103,7 +103,9 @@ function audioFor(text: string | undefined | null, pinyin = false): string | und
   const sourceHash = textHash(norm);
   const version = spoken == null ? null : createHash("sha256").update(pinyinIdentity(norm, spoken)).digest("hex").slice(0,16);
   const rel = version ? `${sourceHash.slice(0,2)}/${sourceHash}.pinyin-${version}.opus` : audioRel(norm);
-  if (audioIndex && audioIndex.has(rel)) return `/audio/${rel}`;
+  if (process.env.WEB_AUDIO_EXTERNAL === "1" || (audioIndex && audioIndex.has(rel))) {
+    return `/audio/${rel}`;
+  }
   return undefined;
 }
 

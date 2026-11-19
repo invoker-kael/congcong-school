@@ -6,6 +6,7 @@
     "build:data": "tsx scripts/build-data.ts && node ../../scripts/run-python.mjs ../../scripts/checks/content-retention.py --public public && node ../../scripts/run-python.mjs ../../scripts/tts/web_audio.py && node ../../scripts/run-python.mjs ../../scripts/tts/apply_audio_versions.py",
     "dev": "npm run build:data && next dev",
     "build": "npm run build:data && next build",
+    "build:container": "tsx scripts/build-data.ts && node ../../scripts/run-python.mjs ../../scripts/checks/content-retention.py --public public && node ../../scripts/run-python.mjs ../../scripts/tts/apply_audio_versions.py --external-audio && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
