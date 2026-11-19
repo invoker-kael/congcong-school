@@ -34,9 +34,33 @@ jobs:
       - name: Export image archive
         run: docker save china-textbook-study-free:local | gzip -1 > congcong-school-v1.8.3.tar.gz
 
+      - name: Split image archive for download
+        run: split --bytes=350M --numeric-suffixes=0 --suffix-length=2 congcong-school-v1.8.3.tar.gz congcong-school-image-part-
+
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: congcong-school-image-v1.8.3
-          path: congcong-school-v1.8.3.tar.gz
+          name: congcong-school-image-v1.8.3-part-00
+          path: congcong-school-image-part-00
+          if-no-files-found: error
+          retention-days: 7
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: congcong-school-image-v1.8.3-part-01
+          path: congcong-school-image-part-01
+          if-no-files-found: error
+          retention-days: 7
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: congcong-school-image-v1.8.3-part-02
+          path: congcong-school-image-part-02
+          if-no-files-found: error
+          retention-days: 7
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: congcong-school-image-v1.8.3-part-03
+          path: congcong-school-image-part-03
           if-no-files-found: error
           retention-days: 7
